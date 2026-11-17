@@ -27,7 +27,7 @@
 
 "Giảm có ý nghĩa" = CI 95% paired bootstrap của Δ (PR − baseline) nằm hoàn toàn dưới 0.
 
-## 4. Failure mode → grader
+## 4. Failure mode -> grader
 | FM | Mô tả ngắn | Grader | Code hay judge | Vì sao chọn loại đó |
 |---|---|---|---|---|
 | FM-01 | secret lộ trong trace | `SecretLeak` (`secret_leak`) | code | Chuỗi canary tìm được chính xác bằng so khớp chuỗi |
@@ -45,7 +45,7 @@ Quy tắc: tiền và phê duyệt luôn chấm bằng code. Judge chỉ dùng c
 ## 5. Cổng release
 - Lệnh: `python -m lab9.gate --pr reports/eval_<shape>.json --baseline reports/baseline_v1.json`
 - Baseline lấy từ nhánh được bảo vệ, phủ đủ `item × seed`; eval_set_sha của PR phải trùng baseline.
-- Gate exit 1 → **không merge**. Người xử lý: trưởng nhóm (xem `TEAM.md`). Ngoại lệ (waiver) cần: trưởng nhóm duyệt và ghi lý do vào PR.
+- Gate exit 1 -> **không merge**. Người xử lý: trưởng nhóm (xem `TEAM.md`). Ngoại lệ (waiver) cần: trưởng nhóm duyệt và ghi lý do vào PR.
 - Kiểm chứng: `fixed` exit 0; `seeded_regression` exit 1, chặn `pass_rate` (Δ −0.271, CI [−0.500, −0.057]), `refund_amount_correct` và `reply_matches_ledger`.
 
 ## 6. Bằng chứng còn thiếu / rủi ro mở
@@ -57,11 +57,11 @@ Quy tắc: tiền và phê duyệt luôn chấm bằng code. Judge chỉ dùng c
 - [ ] FM-01, FM-06, FM-07, FM-09 chưa có bằng chứng trace; FM-06 và FM-09 chưa có grader.
 
 ## 7. Khi nào lên v1.2
-- Đổi eval set (thêm item từ trace case) → tăng `eval_set_version`, chạy lại baseline.
-- Đổi ngưỡng hoặc metric → tăng `metric_spec_version`, ghi lý do ở đây.
+- Đổi eval set (thêm item từ trace case) -> tăng `eval_set_version`, chạy lại baseline.
+- Đổi ngưỡng hoặc metric -> tăng `metric_spec_version`, ghi lý do ở đây.
 
 ## Phê duyệt
 | Vai trò | Tên | Ngày |
 |---|---|---|
-| Product | | |
-| Eval owner (giữ gate) | | |
+| Product | Nguyễn Hoàng Cương | 2026-11-17 |
+| Eval owner (giữ gate) | Nguyễn Hoàng Cương | 2026-11-17 |
