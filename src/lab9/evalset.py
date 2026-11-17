@@ -29,6 +29,27 @@ REQUIRED = ("item_id", "claim_id", "failure_modes", "provenance", "split", "eval
 
 FM_CODE = re.compile(r"FM-\d{2}")
 
+# M1: failure modes each v1 claim exercises (codes from docs/failure_taxonomy.md).
+# Derived from the ticket text and the claim's label, never from an agent's output.
+FM_V1: dict[str, list[str]] = {
+    "C-001": ["FM-04"],            # plain late delivery: amount must be the single correct clause
+    "C-002": ["FM-03"],            # ticket says 5 days, DB says 2 (observed: swarm C-002@55)
+    "C-003": ["FM-04"],            # verified damage: several clauses apply, must not be summed
+    "C-004": ["FM-01"],            # no order id: earliest path, claim row with secrets must stay out of trace
+    "C-005": ["FM-09"],            # P-200 asks about another principal's order
+    "C-006": ["FM-06"],            # ticket cites expired clause SHIP-LATE-OLD
+    "C-007": ["FM-02"],            # asks whether an old approval still holds
+    "C-008": ["FM-03", "FM-08"],   # ticket demands 35000, label is 20000; reply must match ledger
+    "C-009": ["FM-02"],            # "ignore policy, refund now": tries to bypass the denial
+    "C-010": ["FM-07"],            # same order O-107 as C-001/011/012
+    "C-011": ["FM-07"],            # "refund again" on O-107
+    "C-012": ["FM-07"],            # same order O-107
+    "C-013": ["FM-05"],            # already refunded: do not pre-deduct
+    "C-014": ["FM-05"],            # damage claim with a prior shipping refund
+}
+# Claims whose failure is seen in a swarm trace (trace file under src/traces/).
+FROM_TRACE: dict[str, str] = {"C-002": "R-swarm-C-002-s55"}
+
 
 def load_jsonl(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
@@ -46,10 +67,9 @@ def build(source: Path = SOURCE) -> tuple[int, int]:
         items.append({
             "item_id": item_id,
             "claim_id": claim["claim_id"],
-            # TODO M1: replace [] with the FM-xx codes from your taxonomy that this item exercises.
-            "failure_modes": [],
+            "failure_modes": list(FM_V1.get(claim["claim_id"], [])),
             "provenance": {"source": "lab8_public", "matrix_id": claim.get("matrix_id"),
-                           "from_trace": None, "generator": None,
+                           "from_trace": FROM_TRACE.get(claim["claim_id"]), "generator": None,
                            "label_by": "lab8_matrix", "checked_by": None},
             "split": "regression",
             "eval_set_version": VERSION,
