@@ -42,3 +42,20 @@ Card này đi kèm mỗi báo cáo và được dùng lại ở Day 10.
   - Baseline sinh từ nhánh làm việc, chưa phải từ `main` sau khi merge.
   - Judge chỉ kiểm trên CSV đã công khai, chưa có tập held-out.
 - **Khi nào tăng eval-set version:** khi thêm item từ trace case hoặc từ gói adversarial v2 (v1 -> v2, chạy lại baseline); đổi metric hoặc ngưỡng thì tăng `metric_spec_version` và ghi lý do trong `docs/PRD_v1.1.md`.
+
+## Mục v2 (Advanced / Expert)
+
+- **Run ID / eval set:** baseline `E-swarm-20261117-f811` · eval set v2 sha `f811e674441b` (28 item = 14 v1 + 14 adversarial, × 5 seed) · metric_spec `2.0`. `lab9.evalset --v2 --check`: 0 problem; mỗi FM bị tấn công có ≥3 item (FM-03: 4, FM-06: 3, FM-04: 4, FM-05: 5, FM-07: 4, FM-02: 4, FM-08: 3, FM-09: 4). Ánh xạ cơ chế → FM ở `config/fm_map.yaml`.
+- **Ngưỡng chọn từ A/A:** chạy swarm trên hai bộ seed (11…55 và 66, 77, 88, 99, 110): chênh lệch = 0.0000 ở mọi metric. Trên MockLLM nhiễu bằng 0 nên mọi sàn dưới baseline đều không chặn nhầm PR trung thực. Với LLM thật, nhiễu A/A lớn hơn 0 và sàn phải đặt ngoài dải đó. Sàn `pass_hat_5` = 0.85 (baseline 0.8929, `flaky_regression` 0.5714); Expert yêu cầu sàn ≥ 0.80.
+- **Slice nào bắt lỗi nào** (pass_rate theo slice; baseline `money_movement` 1.0):
+
+| Variant | Kết quả gate | Bị chặn bởi |
+|---|---|---|
+| `fixed`, `honest_refactor` | merge | — |
+| `slice_regression` | block | `slice:money_movement/pass_rate` (0.85); `pass_rate` trung bình 0.9357 vẫn trên sàn 0.85 |
+| `flaky_regression` | block | `pass_hat_5` (0.5714), `pass_rate`, `slice:money_movement/pass_rate` |
+| `seeded_regression` | block | `refund_amount_correct`, `pass_rate`, `pass_hat_5`, `reply_matches_ledger` và cả ba slice |
+
+  Slice: `money_movement` (min 0.95), `adversarial` (min 0.90), `denial` (min 0.90), đều blocking và `no_significant_drop`. Scorecard `lab9.mutation`: 3/3 chặn, 0 báo nhầm.
+- **Chống gian lận eval (`integrity_check` và ratchet):** gate chặn (exit 1, lý do INTEGRITY) khi metric NaN/inf, thiếu hoặc trùng dòng, tập (item, seed) khác baseline, `evaluator_failures` khác rỗng hoặc giá trị grader là None, metric không khớp với kết quả tính lại từ dòng, đổi tag slice, hoặc (với `--base-spec`) ngưỡng lỏng hơn, metric/slice bị xoá, blocking bị tắt. 4 trap công khai và 8 trap tự dựng thêm đều bị chặn; baseline so với chính nó vẫn merge.
+- **Giới hạn cỡ mẫu:** một lỗi chỉ xuất hiện ở 1 trong 3 seed (`rare`) không được các metric thống kê phát hiện ổn định với 5 seed; chúng tôi không hạ ngưỡng để gate "bắt được" nó. Gói adversarial chỉ có 14 item, nên CI trên từng slice rất rộng.
