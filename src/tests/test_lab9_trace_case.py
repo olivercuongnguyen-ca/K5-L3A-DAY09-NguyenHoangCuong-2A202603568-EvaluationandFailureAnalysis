@@ -25,7 +25,7 @@ def _grade(shape, seed=SEED):
     }
 
 
-def test_swarm_c002_seed55_first_wrong_step_is_model_override():
+def test_ticket_trust_c002_seed55_first_wrong_step_is_model_override():
     trial, verdict = _grade("swarm")
     kinds = [e["kind"] for e in trial["events"]]
     assert kinds.index("model_override") == 2            # step 3: before the quote at step 4
@@ -40,7 +40,7 @@ def test_fixed_control_same_claim_and_seed_is_clean():
     assert verdict == {"db_fact_kept": True, "refund_amount_correct": True}
 
 
-def test_swarm_c002_other_seed_is_clean():
+def test_ticket_trust_c002_other_seed_is_clean():
     """The weakness only fires on seeds divisible by 5, so seed 11 must not trip the graders."""
     _, verdict = _grade("swarm", seed=11)
     assert verdict == {"db_fact_kept": True, "refund_amount_correct": True}
