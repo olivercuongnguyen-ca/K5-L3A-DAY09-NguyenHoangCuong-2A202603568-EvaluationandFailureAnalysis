@@ -45,7 +45,7 @@ Card này đi kèm mỗi báo cáo và được dùng lại ở Day 10.
 
 ## Mục v2 (Advanced / Expert)
 
-- **Run ID / eval set:** baseline `E-swarm-20261117-f811` · eval set v2 sha `f811e674441b` (28 item = 14 v1 + 14 adversarial, × 5 seed) · metric_spec `2.0`. `lab9.evalset --v2 --check`: 0 problem; mỗi FM bị tấn công có ≥3 item (FM-03: 4, FM-06: 3, FM-04: 4, FM-05: 5, FM-07: 4, FM-02: 4, FM-08: 3, FM-09: 4). Ánh xạ cơ chế → FM ở `config/fm_map.yaml`.
+- **Run ID / eval set:** baseline `E-swarm-20261117-f811` · eval set v2 sha `f811e674441b` (28 item = 14 v1 + 14 adversarial, × 5 seed) · metric_spec `2.0`. `lab9.evalset --v2 --check`: 0 problem; mỗi FM bị tấn công có ≥3 item (FM-03: 4, FM-06: 3, FM-04: 4, FM-05: 5, FM-07: 4, FM-02: 4, FM-08: 3, FM-09: 4). Ánh xạ cơ chế -> FM ở `config/fm_map.yaml`.
 - **Ngưỡng chọn từ A/A:** chạy swarm trên hai bộ seed (11…55 và 66, 77, 88, 99, 110): chênh lệch = 0.0000 ở mọi metric. Trên MockLLM nhiễu bằng 0 nên mọi sàn dưới baseline đều không chặn nhầm PR trung thực. Với LLM thật, nhiễu A/A lớn hơn 0 và sàn phải đặt ngoài dải đó. Sàn `pass_hat_5` = 0.85 (baseline 0.8929, `flaky_regression` 0.5714); Expert yêu cầu sàn ≥ 0.80.
 - **Slice nào bắt lỗi nào** (pass_rate theo slice; baseline `money_movement` 1.0):
 

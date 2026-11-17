@@ -10,8 +10,8 @@ Dương tính = FAIL (judge có nhiệm vụ tìm lỗi). Dữ liệu: replay, n
 | helpful | 100 | 0.375 | 1.000 | 0.300 | **Không đạt** κ và recall (tp 9, fp 0, fn 21, tn 70) | **Loại** |
 
 Hiệu chỉnh Rogan-Gladen (tỉ lệ lỗi thật ≈ 0.30 ở cả hai tiêu chí):
-- tone_ok: quan sát 0.28 → hiệu chỉnh 0.30 (judge đo gần đúng).
-- helpful: quan sát **0.09** → hiệu chỉnh **0.30**. Judge báo thấp gần gấp ba lần tỉ lệ lỗi thật.
+- tone_ok: quan sát 0.28 -> hiệu chỉnh 0.30 (judge đo gần đúng).
+- helpful: quan sát **0.09** -> hiệu chỉnh **0.30**. Judge báo thấp gần gấp ba lần tỉ lệ lỗi thật.
 
 ## ≥5 case audit thủ công (tone_ok)
 Cột "Người nói" là nhãn trong CSV; ghi chú lấy từ cột `note` của CSV, kết hợp đọc lại reply.
